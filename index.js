@@ -2,6 +2,7 @@ const {Floof, FloofBall, Floop, redirect} = require('floof');
 const PassportPlugin = require('floof-passport');
 const SessionPlugin = require('floof-session');
 const TwitterStrategy = require('passport-twitter');
+const parseUrl = require('url').parse;
 
 const {warns, parseScript, Chatroom} = require('./lib/chatroom.js');
 const Db = require('./lib/database.js');
@@ -35,9 +36,10 @@ app.before().exec(async req => {
     req.privatePredicate = 'private';
   }
 });
+const crossOriginUrl = (u => `${u.protocol}//${u.host}`)(parseUrl(process.env.MM_URL));
 app.after().exec(async (req, res) => {
   if (req.allowCrossOrigin) {
-    res.header('Access-Control-Allow-Origin', process.env.MM_URL);
+    res.header('Access-Control-Allow-Origin', crossOriginUrl);
     res.header('Access-Control-Allow-Credentials', 'true');
   }
 });
