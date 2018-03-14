@@ -1,0 +1,115 @@
+<? extends parent.html ?>
+<? def pagename ?>home<? undef ?>
+<? def head ?>
+<link rel="stylesheet" href="/static/css/chatroom-list.css">
+<style>
+    #banner {
+        width: 100%; height: 60vh;
+        position: relative;
+        background: url("/static/img/banner.png") center;
+        background-size: cover;
+    }
+
+    #banner-shade {
+        background-color: rgba(0, 0, 0, 0.72);
+        box-shadow: inset 0 0 49vw 1vw #000;
+    }
+
+    #banner-content {
+        padding: 0 10%;
+        font-size: 0;
+    }
+
+    #banner-text-container {
+        display: inline-block;
+    }
+
+    #banner-title {
+        font-size: 72pt;
+    }
+
+    #banner-subtitle {
+        font-size: 36pt;
+    }
+
+    .section {
+        margin: 36px 0;
+        padding: 0 10%;
+    }
+
+    .more-button-container {
+        text-align: center;
+    }
+
+    .more-button-icon, .more-button-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .more-button {
+        padding: 4px 6px;
+        display: inline-block;
+        border: 1px solid #e6d378;
+    }
+
+    .more-button:hover {
+        border-color: #5ee7c1;
+    }
+
+    .more-button-icon {
+        height: 24px;
+    }
+
+    .more-button-text {
+        font-size: 11pt;
+    }
+</style>
+<? undef ?>
+<? def main ?>
+<div id="banner">
+    <div id="banner-shade" class="visor"></div>
+    <div id="banner-content" class="visor">
+        <div class="valign-helper"></div>
+        <div id="banner-text-container">
+            <p id="banner-title">libseven</p>
+            <p id="banner-subtitle">interactive fanfiction~</p>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <h1>New Chatrooms</h1>
+    <div class="chatroom-list">
+        <div class="chatroom-list-bg-a visor"></div>
+        <div class="chatroom-list-bg-b visor"></div>
+        <? for (const chat of chats) { ?>
+            <div class="chatroom">
+                <div class="chatroom-bg-container visor">
+                    <svg class="chatroom-bg" viewBox="-2 -2 34 68">
+                        <path d="M 0 0 L 32 0 M 23.5 64 L 32 64"></path>
+                        <path d="M 25 0 L 25 64 M 0 -2 L 0 2" stroke-width="3"></path>
+                    </svg>
+                </div>
+                <div class="chatroom-details">
+                    <a class="chatroom-name" href="<?= chat.url ?>"><?= chat.name ?></a>
+                    <a class="chatroom-author" href="/profile/<?= chat.author.twitterId ?>">
+                        <?= chat.authorProfile.screen_name ?>
+                    </a>
+                </div>
+                <a class="chatroom-members" href="<?= chat.url ?>">
+                    <? for (const member of chat.members) { ?>
+                        <div class="chatroom-member tt" data-tt="<?- member.name ?>">
+                            <img src="<?= member.avatar ?>"/>
+                        </div>
+                    <? } ?>
+                </a>
+            </div>
+        <? } ?>
+    </div>
+    <div class="more-button-container">
+        <a class="more-button" href="/browse">
+            <span class="more-button-text">keep browsing</span>
+            <img class="more-button-icon" src="/static/img/icon/right.png"/>
+        </a>
+    </div>
+</div>
+<? undef ?>

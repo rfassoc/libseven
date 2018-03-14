@@ -1,0 +1,155 @@
+<? extends parent.html ?>
+<? def pagename ?><?= profile.screen_name ?><? undef ?>
+<? def head ?>
+<link rel="stylesheet" href="/static/css/chatroom-list.css">
+<style>
+    main {
+        margin: 36px 0;
+        padding: 0 10%;
+    }
+
+    #profile {
+        margin-bottom: 28px;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+    }
+
+    #profile-left {
+        width: 100px; height: 100px;
+        margin-right: 24px;
+    }
+
+    #profile-avatar {
+        height: 100%;
+        border-radius: 50%;
+    }
+
+    #profile-right {
+        flex: 1;
+    }
+
+    #profile-name {
+        font-size: 24pt;
+        font-weight: bold;
+    }
+
+    #profile-handle {
+        display: block;
+        opacity: 0.64;
+        transition: opacity 0.2s;
+    }
+
+    #profile-handle:hover {
+        opacity: 1;
+    }
+
+    #profile-handle-icon, #profile-handle-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #profile-handle-icon {
+        height: 24px;
+    }
+
+    #profile-handle-text {
+        font-size: 18pt;
+    }
+
+    #no-results {
+        margin-left: 24px;
+    }
+
+    #page-button-container {
+        text-align: center;
+    }
+
+    .page-button, .page-button-icon, .page-button-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .page-button {
+        padding: 4px 6px;
+        border: 1px solid #e6d378;
+    }
+
+    .page-button:hover {
+        border-color: #5ee7c1;
+    }
+
+    .page-button-icon {
+        height: 24px;
+    }
+
+    .page-button-text {
+        font-size: 11pt;
+    }
+</style>
+<? undef ?>
+<? def main ?>
+<div id="profile">
+    <div id="profile-left">
+        <img id="profile-avatar" src="<?= profile.profile_image_url.replace('_normal', '') ?>"/>
+    </div>
+    <div id="profile-right">
+        <div id="profile-name"><?= profile.name ?></div>
+        <a id="profile-handle" href="https://twitter.com/<?= profile.screen_name ?>">
+            <img id="profile-handle-icon" src="/static/img/icon/twitter.png"/>
+            <span id="profile-handle-text"><?= profile.screen_name ?></span>
+        </a>
+    </div>
+</div>
+<h1><?= profile.screen_name ?>'s Chatrooms</h1>
+<div class="chatroom-list">
+    <div class="chatroom-list-bg-a visor"></div>
+    <div class="chatroom-list-bg-b visor"></div>
+    <? if (chats.length) { ?>
+        <? for (const chat of chats) { ?>
+            <div class="chatroom">
+                <div class="chatroom-bg-container visor">
+                    <svg class="chatroom-bg" viewBox="-2 -2 34 68">
+                        <path d="M 0 0 L 32 0 M 23.5 64 L 32 64"></path>
+                        <path d="M 25 0 L 25 64 M 0 -2 L 0 2" stroke-width="3"></path>
+                    </svg>
+                </div>
+                <div class="chatroom-details">
+                    <a class="chatroom-name" href="<?= chat.url ?>"><?= chat.name ?></a>
+                    <a class="chatroom-author" href="/profile/<?= chat.author.twitterId ?>">
+                        <?= chat.authorProfile.screen_name ?>
+                    </a>
+                </div>
+                <a class="chatroom-members" href="<?= chat.url ?>">
+                    <? for (const member of chat.members) { ?>
+                        <div class="chatroom-member tt" data-tt="<?- member.name ?>">
+                            <img src="<?= member.avatar ?>"/>
+                        </div>
+                    <? } ?>
+                </a>
+            </div>
+        <? } ?>
+    <? } else { ?>
+        <div id="no-results">
+            <div class="emoji">:(</div>
+            <h2>no chatrooms.</h2>
+        </div>
+    <? } ?>
+</div>
+<? if (chats.length) { ?>
+    <div id="page-button-container">
+        <? if (page > 0) { ?>
+            <a class="page-button" href="?p=<?= page - 1?>">
+                <img class="page-button-icon" src="/static/img/icon/left.png"/>
+                <span class="page-button-text">newer</span>
+            </a>
+        <? } ?>
+        <? if (more) { ?>
+            <a class="page-button" href="?p=<?= page + 1 ?>">
+                <span class="page-button-text">older</span>
+                <img class="page-button-icon" src="/static/img/icon/right.png"/>
+            </a>
+        <? } ?>
+    </div>
+<? } ?>
+<? undef ?>

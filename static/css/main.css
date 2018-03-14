@@ -1,0 +1,254 @@
+@font-face {
+    font-family: "Nanum Gothic";
+    src: url("/static/font/Nanum Gothic.ttf");
+}
+
+* {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-bottom: 16px;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+h1 > small {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #a0a0a0;
+}
+
+h2 {
+    font-size: 18pt;
+    font-weight: normal;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+input {
+    outline: none;
+}
+
+input[type="text"] {
+    padding: 6px 8px;
+    background-color: #fff;
+    border: none;
+    font-size: 10pt;
+    font-family: "Nanum Gothic", "Arial", sans-serif;
+}
+
+.valign-helper {
+    width: 0; height: 100%;
+    display: inline-block;
+}
+
+.valign-helper, .valign-helper ~ * {
+    vertical-align: middle;
+}
+
+.visor {
+    width: 100%; height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+}
+
+.emoji {
+    margin-bottom: 4px;
+    color: #fe105b;
+    font-size: 32pt;
+    font-weight: bold;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: "Nanum Gothic", "Arial", sans-serif;
+    overflow-x: hidden;
+}
+
+#page-wrapper {
+    position: relative;
+}
+
+@media (max-aspect-ratio: 3/4) {
+    #page-wrapper {
+        padding-bottom: 12px;
+    }
+}
+
+header {
+    height: 52px;
+    padding-bottom: 1px;
+    display: flex;
+    flex-flow: row;
+    background-color: #000;
+    border-bottom: 1px solid #e6d378;
+}
+
+#header-logo {
+    width: 52px; height: 100%;
+    position: relative;
+    display: block;
+    background-color: inherit;
+}
+
+#header-logo-text {
+    height: 100%;
+    padding-right: 12px;
+    position: absolute;
+    top: 0; right: 0;
+    background-color: inherit;
+    line-height: 52px;
+    transition: transform 0.2s;
+}
+
+#header-logo-colour-box, #header-logo-img {
+    width: 100%; height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+}
+
+#header-logo-colour-box {
+    background-color: inherit;
+}
+
+#header-logo:hover > #header-logo-text {
+    transform: translateX(100%);
+}
+
+#header-logo-img {
+    transition: transform 0.2s, stroke 0.2s;
+}
+
+#header-logo:hover > #header-logo-img {
+    stroke: #fe105b;
+    transform: scale(1.1) rotate(45deg);
+}
+
+#header-search {
+    padding: 14px;
+    padding-left: 4px;
+    flex: 1 0;
+}
+
+#header-search-form {
+    height: 100%; width: 100%;
+}
+
+#header-search-input {
+    height: 100%; width: 100%;
+    background-color: #000;
+    border: 1px solid #e6d378;
+    color: #fff;
+}
+
+#header-search-input:focus {
+   border-color: #5ee7c1;
+}
+
+#flashes-container {
+    height: 100%;
+    position: absolute;
+    top: 58px;
+    opacity: 0;
+    animation: vanish 1 7s;
+    pointer-events: none;
+}
+
+@keyframes vanish {
+    0%, 94% {
+        left: 6px;
+        opacity: 1;
+    }
+    100% {
+        left: -64px;
+        opacity: 0;
+    }
+}
+
+#flashes {
+    position: sticky;
+    top: 6px; left: 6px;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+.flash {
+    margin-bottom: 4px;
+    padding: 6px 8px;
+    background-color: #000;
+    border: 1px solid #e6d378;
+    font-size: 10pt;
+    cursor: pointer;
+}
+
+#copy {
+    position: fixed;
+    bottom: 6px; left: 6px;
+    color: #6e6e6e;
+    font-size: 8pt;
+    flex: 1;
+}
+
+#nav {
+    position: fixed;
+    bottom: 6px; right: 6px;
+    height: 2.5vh;
+    text-align: right;
+    flex: 1;
+}
+
+.nav-elem {
+    height: 100%;
+    display: inline-block;
+}
+
+.nav-icon {
+    height: 100%;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.nav-elem:hover > .nav-icon {
+    opacity: 1;
+}
+
+#tooltip {
+    padding: 2px 4px;
+    position: fixed;
+    background-color: #212121;
+    border: 1px solid #e6d378;
+    opacity: 0;
+    font-size: 11pt;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    pointer-events: none;
+}
+
+#tooltip:before {
+    width: 0; height: 0;
+    position: absolute;
+    bottom: -10px; right: -1px;
+    border-right: 9px solid #e6d378;
+    border-bottom: 9px solid transparent;
+    content: '';
+}
+
+#tooltip:after {
+    width: 0; height: 0;
+    position: absolute;
+    bottom: -7px; right: 0;
+    border-right: 8px solid #212121;
+    border-bottom: 8px solid transparent;
+    content: '';
+}
+
+#tooltip.show {
+    opacity: 1;
+}

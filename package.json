@@ -1,0 +1,19 @@
+{
+  "name": "libseven",
+  "version": "1.0.0",
+  "description": "Everyone's party",
+  "main": "index.js",
+  "repository": "https://github.com/rfassoc/libseven.git",
+  "author": "phantamanta44",
+  "license": "MIT",
+  "dependencies": {
+    "airtable": "^0.5.2",
+    "chalk": "^2.3.2",
+    "chokidar": "^2.0.2",
+    "floof": "^1.0.14",
+    "floof-passport": "^1.0.1",
+    "floof-session": "^1.0.2",
+    "passport-twitter": "^1.0.4",
+    "request": "^2.83.0"
+  }
+}

@@ -1,0 +1,192 @@
+<? extends parent.html ?>
+<? def pagename ?><? if (edit) { ?>editing "<?= chat.name ?>"<? } else { ?>new<? } ?><? undef ?>
+<? def head ?>
+<style>
+    main {
+        margin: 36px 0;
+        padding: 0 10%;
+    }
+
+    .field {
+        margin-bottom: 14px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #212121;
+    }
+
+    .field-title {
+        margin-bottom: 10px;
+        font-size: 18pt;
+        font-weight: bold;
+    }
+
+    .field-subtitle {
+        margin-top: -5px;
+        margin-bottom: 10px;
+        color: #dedede;
+        font-size: 11pt;
+    }
+
+    .field-subtitle > a {
+        color: #5ee7c1;
+        transition: color 0.2s;
+    }
+
+    .field-subtitle > a:hover {
+        color: #fe105b;
+    }
+
+    .field-input {
+        margin-left: 6px;
+        margin-bottom: 6px;
+    }
+
+    .field-input:last-child {
+        margin-bottom: 0;
+    }
+
+    .field-input > input, .input-label {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    input[type="checkbox"] {
+        width: 12px; height: 12px;
+        border: 1px solid #5ee7c1;
+        transform: rotate(-45deg);
+        transition: width 0.3s, height 0.3s, border-color 0.3s, border-width 0.3s, transform 0.3s;
+        cursor: pointer;
+        -webkit-appearance: none;
+    }
+
+    input[type="checkbox"]:checked {
+        border-color: #fe105b;
+        border-width: 6px;
+        transform: rotate(135deg);
+    }
+
+    .input-label {
+        margin-left: 4px;
+        font-size: 11pt;
+        color: #dedede;
+    }
+
+    .input-label > strong {
+        font-weight: bold;
+        color: #fff;
+    }
+
+    #field-body {
+        display: none;
+    }
+
+    #submit-button {
+        padding: 6px 8px;
+        background: none;
+        border: 1px solid #e6d378;
+        color: #fff;
+        cursor: pointer;
+        -webkit-appearance: none;
+    }
+
+    #submit-button:hover {
+        border-color: #5ee7c1;
+    }
+
+    #submit-icon, #submit-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #submit-icon {
+        height: 18px;
+    }
+
+    #submit-text {
+        font-size: 11pt;
+    }
+</style>
+<? undef ?>
+<? def main ?>
+<h1><? if (edit) { ?>Editing "<?= chat.name ?>"...<? } else { ?>New Chatroom<? } ?></h1>
+<form id="form" method="POST" action="<?= req.url ?>">
+    <div class="field">
+        <div class="field-title">Chatroom Name</div>
+        <div class="field-input">
+            <input type="text" name="name" value="<?= chat.name ?>" required maxlength="32">
+        </div>
+    </div>
+    <div class="field">
+        <div class="field-title">Chatroom Privacy</div>
+        <div class="field-input">
+            <input type="checkbox" name="isprivate" value="true"<? if (chat.isPrivate) {?> checked<? } ?>>
+            <div class="input-label">Only let users with a direct link see this chatroom.</div>
+        </div>
+    </div>
+    <div class="field">
+        <div class="field-title">Chatroom Warnings</div>
+        <? for (const warn of warns) { ?>
+            <div class="field-input">
+                <input type="checkbox" name="warn-<?= warn.key ?>" value="true"<? if (chat.isWarningActive(warn.key)) { ?> checked<? } ?>>
+                <div class="input-label"><strong><?= warn.name ?>:</strong> <?= warn.desc ?></div>
+            </div>
+        <? } ?>
+    </div>
+    <div class="field">
+        <div class="field-title">Chat Script</div>
+        <div class="field-subtitle">
+            Don't know what this is?
+            <a href="https://github.com/rfassoc/MysticMess/blob/master/docs/script-syntax.md" target="_blank" rel="noopener">
+                Check out the documentation!
+            </a>
+        </div>
+        <pre id="script-editor"><?= chat.scriptText ?></pre>
+        <textarea id="field-body" name="body"></textarea>
+    </div>
+    <button id="submit-button" type="button">
+        <img id="submit-icon" src="/static/img/icon/save.png">
+        <span id="submit-text">Save</span>
+    </button>
+</form>
+<? undef ?>
+<? def end ?>
+<script src="/static/js/ace.min.js"></script>
+<script src="/static/js/ace-theme.min.js"></script>
+<script src="/static/js/syntax.js"></script>
+<script type="text/javascript">
+    const bodyField = document.getElementById('field-body');
+    const editor = ace.edit('script-editor');
+    editor.setOptions({
+      autoScrollEditorIntoView: true,
+      copyWithEmptySelection: true,
+      useSoftTabs: true,
+      tabSize: 1,
+      minLines: 40,
+      maxLines: 40,
+      fontSize: '11pt',
+      wrap: true,
+      theme: require('ace/theme/tomorrow_night'),
+      mode: 'ace/mode/myscript',
+    });
+
+    function validateScript() {
+      bodyField.value = editor.getValue();
+      const lines = bodyField.value.split('\n');
+      const sectionDelim = lines.findIndex(l => l.trim() === '---');
+      if (sectionDelim === -1) throw new Error('No header/body delimiter');
+      for (let i = 0; i < sectionDelim; i++) {
+        if (lines[i].indexOf(':') === -1) throw new Error('Invalid metadata line');
+      }
+    }
+    const form = document.getElementById('form');
+    document.getElementById('submit-button').onclick = () => {
+      if (form.reportValidity()) {
+        try {
+          validateScript();
+          form.submit();
+        } catch (e) {
+          alert(`Invalid script: ${e.message}`);
+        }
+      }
+    };
+</script>
+<? undef ?>

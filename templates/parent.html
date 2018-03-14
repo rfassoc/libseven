@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/main.css">
+        <? block head ?>
+        <title>libseven | <? block pagename ?></title>
+    </head>
+    <body>
+        <div id="page-wrapper">
+            <header>
+                <a id="header-logo" href="/">
+                    <div id="header-logo-text">libseven</div>
+                    <div id="header-logo-colour-box"></div>
+                    <svg id="header-logo-img" viewBox="-18 -23 66 66" stroke="#5ee7c1" stroke-width="2" fill="none">
+                        <rect width="30" height="20"></rect>
+                        <path d="M 0 0 L 15 13 L 30 0 M 0 20 L 11.54 10 M 30 20 L 18.46 10"></path>
+                    </svg>
+                </a>
+                <div id="header-search">
+                    <form id="header-search-form" method="GET" action="/search">
+                        <input type="text" id="header-search-input" name="q"
+                               placeholder="Search..." autocomplete="off" required
+                               <? if (search) { ?>value="<?= search ?>"<? } ?>>
+                    </form>
+                </div>
+            </header>
+            <main>
+                <? block main ?>
+            </main>
+            <div id="flashes-container">
+                <div id="flashes">
+                    <? for (const flash of req.flashes) { ?>
+                        <div class="flash"><?= flash ?></div>
+                    <? } ?>
+                </div>
+            </div>
+            <div id="copy">&copy; 2018 Evan Geng</div>
+            <div id="nav">
+                <a class="nav-elem tt" href="/browse" data-tt="Browse">
+                    <img class="nav-icon" src="/static/img/icon/browse.png"/>
+                </a>
+                <? if (req.user) { ?>
+                    <a class="nav-elem tt" href="/new" data-tt="New Chatroom">
+                        <img class="nav-icon" src="/static/img/icon/new.png"/>
+                    </a>
+                    <a class="nav-elem tt" href="/profile/<?= req.user.twitterId ?>" data-tt="Profile">
+                        <img class="nav-icon" src="/static/img/icon/profile.png"/>
+                    </a>
+                    <a class="nav-elem tt" href="/logout" data-tt="Log Out">
+                        <img class="nav-icon" src="/static/img/icon/logout.png"/>
+                    </a>
+                <? } else { ?>
+                    <a class="nav-elem tt" href="/login" data-tt="Log In">
+                        <img class="nav-icon" src="/static/img/icon/login.png"/>
+                    </a>
+                <? } ?>
+            </div>
+            <div id="tooltip"></div>
+            <script src="/static/js/main.js"></script>
+            <? block end ?>
+        </div>
+    </body>
+</html>

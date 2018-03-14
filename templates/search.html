@@ -1,0 +1,94 @@
+<? extends parent.html ?>
+<? def pagename ?>search<? undef ?>
+<? def head ?>
+<link rel="stylesheet" href="/static/css/chatroom-list.css">
+<style>
+    main {
+        margin: 36px 0;
+        padding: 0 10%;
+    }
+
+    #no-results {
+        margin-left: 24px;
+    }
+
+    #page-button-container {
+        text-align: center;
+    }
+
+    .page-button, .page-button-icon, .page-button-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .page-button {
+        padding: 4px 6px;
+        border: 1px solid #e6d378;
+    }
+
+    .page-button:hover {
+        border-color: #5ee7c1;
+    }
+
+    .page-button-icon {
+        height: 24px;
+    }
+
+    .page-button-text {
+        font-size: 11pt;
+    }
+</style>
+<? undef ?>
+<? def main ?>
+<h1>Search Results: <small><?= search ?></small></h1>
+<div class="chatroom-list">
+    <div class="chatroom-list-bg-a visor"></div>
+    <div class="chatroom-list-bg-b visor"></div>
+    <? if (chats.length) { ?>
+        <? for (const chat of chats) { ?>
+            <div class="chatroom">
+                <div class="chatroom-bg-container visor">
+                    <svg class="chatroom-bg" viewBox="-2 -2 34 68">
+                        <path d="M 0 0 L 32 0 M 23.5 64 L 32 64"></path>
+                        <path d="M 25 0 L 25 64 M 0 -2 L 0 2" stroke-width="3"></path>
+                    </svg>
+                </div>
+                <div class="chatroom-details">
+                    <a class="chatroom-name" href="<?= chat.url ?>"><?= chat.name ?></a>
+                    <a class="chatroom-author" href="/profile/<?= chat.author.twitterId ?>">
+                        <?= chat.authorProfile.screen_name ?>
+                    </a>
+                </div>
+                <a class="chatroom-members" href="<?= chat.url ?>">
+                    <? for (const member of chat.members) { ?>
+                        <div class="chatroom-member tt" data-tt="<?- member.name ?>">
+                            <img src="<?= member.avatar ?>"/>
+                        </div>
+                    <? } ?>
+                </a>
+            </div>
+        <? } ?>
+    <? } else { ?>
+        <div id="no-results">
+            <div class="emoji">:(</div>
+            <h2>no results.</h2>
+        </div>
+    <? } ?>
+</div>
+<? if (chats.length) { ?>
+    <div id="page-button-container">
+        <? if (page > 0) { ?>
+            <a class="page-button" href="?q=<?= req.q ?>&p=<?= page - 1?>">
+                <img class="page-button-icon" src="/static/img/icon/left.png"/>
+                <span class="page-button-text">newer</span>
+            </a>
+        <? } ?>
+        <? if (more) { ?>
+            <a class="page-button" href="?q=<?= req.q ?>&p=<?= page + 1 ?>">
+                <span class="page-button-text">older</span>
+                <img class="page-button-icon" src="/static/img/icon/right.png"/>
+            </a>
+        <? } ?>
+    </div>
+<? } ?>
+<? undef ?>

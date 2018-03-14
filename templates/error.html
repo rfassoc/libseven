@@ -1,0 +1,30 @@
+<? extends parent.html ?>
+<? def pagename ?><?= code ?><? undef ?>
+<? def head ?>
+<style>
+    #page-wrapper {
+        min-height: 100vh;
+    }
+
+    main {
+        padding: 0 10%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #big-num {
+        font-size: 24vw;
+        font-weight: bold;
+    }
+
+    #msg {
+        font-size: 32pt;
+        text-transform: lowercase;
+    }
+</style>
+<? undef ?>
+<? def main ?>
+<div id="big-num"><?= code ?></div>
+<div id="msg"><?= msg ?>.</div>
+<? undef ?>
