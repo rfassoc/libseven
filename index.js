@@ -124,11 +124,17 @@ async function renderList(ren, template, page, ctx, query) {
       }
     });
   });
-  if (!lookup) throw new Floop(400, 'invalid page');
-  return ren.render(template, {
-    ...ctx, page, more: lookup.more,
-    chats: await Chatroom.wrapAll(lookup.chatrooms),
-  });
+  if (!lookup) {
+    if (page !== 0) throw new Floop(400, 'invalid page');
+    return ren.render(template, {
+      ...ctx, page: 0, more: false, chats: [],
+    });
+  } else {
+    return ren.render(template, {
+      ...ctx, page, more: lookup.more,
+      chats: await Chatroom.wrapAll(lookup.chatrooms),
+    });
+  }
 }
 
 app.get('/browse').withQuery('p', 'int').exec(async (req, ren) => {
