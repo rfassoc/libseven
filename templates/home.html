@@ -29,7 +29,34 @@
     }
 
     #banner-subtitle {
+        margin-left: 5px;
+        margin-bottom: 4px;
         font-size: 36pt;
+    }
+
+    #banner-link {
+        opacity: 0.627;
+        transition: opacity 0.2s;
+    }
+
+    #banner-link:hover {
+        opacity: 1;
+    }
+
+    #banner-link-text, #banner-link-icon {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #banner-link-text, #banner-welcome {
+        margin-left: 7px;
+        font-size: 18pt;
+        text-transform: lowercase;
+    }
+
+    #banner-link-icon {
+        height: 24px;
+        margin-left: 2px;
     }
 
     .section {
@@ -72,7 +99,15 @@
         <div class="valign-helper"></div>
         <div id="banner-text-container">
             <p id="banner-title">libseven</p>
-            <p id="banner-subtitle">interactive fanfiction~</p>
+            <p id="banner-subtitle">interactive fanfiction</p>
+            <? if (req.user) { ?>
+                <p id="banner-welcome">welcome back, <?= req.profile.name ?>.</p>
+            <? } else { ?>
+                <a id="banner-link" href="/login">
+                    <span id="banner-link-text">log in</span>
+                    <img id="banner-link-icon" src="/static/img/icon/right.png"/>
+                </a>
+            <? } ?>
         </div>
     </div>
 </div>

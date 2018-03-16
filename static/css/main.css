@@ -219,6 +219,18 @@ header {
     opacity: 1;
 }
 
+#login {
+    position: relative;
+    animation: pulse 1.2s infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
 #tooltip {
     padding: 2px 4px;
     position: fixed;
