@@ -195,7 +195,7 @@ app.get('/chat/:id/retrieve').exec(async (req, ren) => {
   return rec.get('body');
 });
 
-app.post('/chat/:id/delete').exec(async (req, ren) => {
+app.get('/chat/:id/delete').exec(async (req, ren) => {
   if (!req.user) throw new Floop(401);
   if (!req.id) throw new Floop(400, 'no chatroom specified');
   const rec = await Db.chatrooms.find(req.id);
