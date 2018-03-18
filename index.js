@@ -2,6 +2,7 @@ const {Floof, FloofBall, Floop, redirect} = require('floof');
 const PassportPlugin = require('floof-passport');
 const SessionPlugin = require('floof-session');
 const TwitterStrategy = require('passport-twitter');
+const request = require('request');
 const parseUrl = require('url').parse;
 
 const {warns, parseScript, Chatroom} = require('./lib/chatroom.js');
@@ -269,6 +270,23 @@ app.post('/new').withBody('form').exec(async (req, ren) => {
     'private': !!body.isprivate,
     'warnings': warnings,
   });
+  if (!body.isprivate && process.env.DISCORD_WEBHOOK) {
+    request.post(process.env.DISCORD_WEBHOOK, {
+      json: true,
+      body: {
+        embeds: [{
+          'description': `**New chatroom:** [${body.name}](${process.env.BASE_URL}/chat/${rec.id})`,
+          'color': 6219713,
+          'timestamp': new Date().toISOString(),
+          'author': {
+            'name': req.profile.screen_name,
+            'url': `${process.env.BASE_URL}/profile/${req.user.twitterId}`,
+            'icon_url': req.profile.profile_image_url,
+          },
+        }],
+      },
+    });
+  }
   req.flash(`created "${body.name}".`);
   return redirect(`/chat/${rec.id}`);
 });

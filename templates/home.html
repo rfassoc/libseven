@@ -59,6 +59,48 @@
         margin-left: 2px;
     }
 
+    #extern-section {
+        width: 100%;
+        padding: 18px 10%;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        background-color: #111;
+    }
+
+    #extern-header {
+        font-size: 16pt;
+        font-weight: bold;
+    }
+
+    #extern-list {
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: space-evenly;
+        flex: 1;
+    }
+
+    .extern {
+        display: block;
+        opacity: 0.627;
+        transition: opacity 0.2s;
+    }
+
+    .extern:hover {
+        opacity: 1;
+    }
+
+    .extern-icon, .extern-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .extern-icon {
+        height: 36px;
+        margin-right: 4px;
+    }
+
     .section {
         margin: 36px 0;
         padding: 0 10%;
@@ -109,6 +151,19 @@
                 </a>
             <? } ?>
         </div>
+    </div>
+</div>
+<div id="extern-section">
+    <div id="extern-header">Find us on...</div>
+    <div id="extern-list">
+        <a class="extern" href="https://github.com/rfassoc/libseven" target="_blank" rel="noopener">
+            <img class="extern-icon" src="/static/img/extern/github.png"/>
+            <span class="extern-text">GitHub</span>
+        </a>
+        <a class="extern" href="https://discord.gg/tqhPaNv" target="_blank" rel="noopener">
+            <img class="extern-icon" src="/static/img/extern/discord.png"/>
+            <span class="extern-text">Discord</span>
+        </a>
     </div>
 </div>
 <div class="section">
