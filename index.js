@@ -255,6 +255,25 @@ function validate(body) {
   if (!body.name || body.name.length > 32) throw new Floop(400, 'invalid name');
   if (!body.body || !validateScript(body.body)) throw new Floop(400, 'invalid script');
 }
+function fireWebhook(name, id, req) {
+  if (process.env.DISCORD_WEBHOOK) {
+    request.post(process.env.DISCORD_WEBHOOK, {
+      json: true,
+      body: {
+        embeds: [{
+          'description': `**New chatroom:** [${name}](${process.env.BASE_URL}/chat/${id})`,
+          'color': 6219713,
+          'timestamp': new Date().toISOString(),
+          'author': {
+            'name': req.profile.screen_name,
+            'url': `${process.env.BASE_URL}/profile/${req.user.twitterId}`,
+            'icon_url': req.profile.profile_image_url,
+          },
+        }],
+      },
+    });
+  }
+}
 
 app.post('/new').withBody('form').exec(async (req, ren) => {
   if (!req.user) throw new Floop(401);
@@ -268,25 +287,10 @@ app.post('/new').withBody('form').exec(async (req, ren) => {
     'clean_name': body.name.replace(/[^\w\s]/gi, '').toLowerCase(),
     'body': body.body,
     'private': !!body.isprivate,
+    'published': !body.isprivate,
     'warnings': warnings,
   });
-  if (!body.isprivate && process.env.DISCORD_WEBHOOK) {
-    request.post(process.env.DISCORD_WEBHOOK, {
-      json: true,
-      body: {
-        embeds: [{
-          'description': `**New chatroom:** [${body.name}](${process.env.BASE_URL}/chat/${rec.id})`,
-          'color': 6219713,
-          'timestamp': new Date().toISOString(),
-          'author': {
-            'name': req.profile.screen_name,
-            'url': `${process.env.BASE_URL}/profile/${req.user.twitterId}`,
-            'icon_url': req.profile.profile_image_url,
-          },
-        }],
-      },
-    });
-  }
+  if (body.published) fireWebhook(body.name, rec.id, req);
   req.flash(`created "${body.name}".`);
   return redirect(`/chat/${rec.id}`);
 });
@@ -307,8 +311,10 @@ app.post('/chat/:id/edit').withBody('form').exec(async (req, ren) => {
     'clean_name': body.name.replace(/[^\w\s]/gi, '').toLowerCase(),
     'body': body.body,
     'private': !!body.isprivate,
+    'published': rec.published || !body.isprivate,
     'warnings': warnings,
   });
+  if (!rec.published && !body.isprivate) fireWebhook(body.name, rec.id, req);
   req.flash(`edited "${body.name}".`);
   return redirect(`/chat/${req.id}`);
 });
