@@ -311,10 +311,10 @@ app.post('/chat/:id/edit').withBody('form').exec(async (req, ren) => {
     'clean_name': body.name.replace(/[^\w\s]/gi, '').toLowerCase(),
     'body': body.body,
     'private': !!body.isprivate,
-    'published': rec.published || !body.isprivate,
+    'published': rec.get('published') || !body.isprivate,
     'warnings': warnings,
   });
-  if (!rec.published && !body.isprivate) fireWebhook(body.name, rec.id, req);
+  if (!rec.get('published') && !body.isprivate) fireWebhook(body.name, rec.id, req);
   req.flash(`edited "${body.name}".`);
   return redirect(`/chat/${req.id}`);
 });
